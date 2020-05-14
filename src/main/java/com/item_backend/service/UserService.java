@@ -18,4 +18,12 @@ public interface UserService {
     // 用户登出
     boolean logout();
 
+    // 获取个人信息
+    Map getProfile(String token);
+
+    // 修改个人信息
+    Map updateUserDetail(String token, User user) throws JsonProcessingException;
+
+    // 修改登录密码
+    Map changePassword(String token, String oldPassword, String newPassword);
 }

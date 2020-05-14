@@ -42,6 +42,7 @@ public class ControllerLog {
 
         //方法消耗时间
         long start = System.currentTimeMillis();
+        // 执行方法
         Object obj = pjp.proceed();
         long end = System.currentTimeMillis();
 
@@ -58,7 +59,6 @@ public class ControllerLog {
         logger.info(builder.toString());
         return obj;
     }
-
-
+    
 }
 

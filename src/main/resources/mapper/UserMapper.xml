@@ -27,4 +27,23 @@
         WHERE job_number = #{job_number} AND u_school = #{u_school}
     </select>
 
+    <update id="updateUser" parameterType="User">
+        UPDATE user SET u_type = #{u_type}, u_school = #{u_school}, u_faculty = #{u_faculty}, job_number = #{job_number},
+         name = #{name}, id_number = #{id_number}, email = #{email}, telephone = #{telephone},
+         operate_subject = #{operate_subject}, u_state = #{u_state}
+        WHERE u_id = #{u_id}
+    </update>
+
+    <select id="searchUserByUIdAndPassword" resultMap="User">
+        SELECT u_id, u_type, u_school, u_faculty, job_number, password, name, id_number,
+        email, telephone, operate_subject, u_state
+        from user
+        WHERE u_id = #{u_id} AND password = #{password}
+    </select>
+
+    <update id="changePassword">
+        UPDATE user SET password = #{newPassword}
+        WHERE u_id = #{u_id}
+    </update>
+
 </mapper>

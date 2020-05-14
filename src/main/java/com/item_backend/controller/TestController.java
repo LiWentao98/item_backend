@@ -1,8 +1,8 @@
 package com.item_backend.controller;
 
+import com.item_backend.model.entity.TestUser;
 import com.item_backend.model.pojo.Result;
 import com.item_backend.model.pojo.StatusCode;
-import com.item_backend.model.entity.TestUser;
 import com.item_backend.service.impl.TestUserServiceImpl;
 import com.item_backend.utils.FormatUtil;
 import com.item_backend.utils.JwtTokenUtil;
@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
