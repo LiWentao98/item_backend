@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.item_backend.mapper.TeacherInfoMapper">
+
+    <insert id="addTeacher">
+        insert into user(u_school,job_number,name,id_number,email,telephone,u_type,u_state,password) values
+         (#{u_school},#{job_number},#{name},#{id_number},#{email},#{telephone},#{u_type},#{u_state},#{password})
+    </insert>
+
+    <select id="findUserById" resultType="com.item_backend.model.entity.User" parameterType="Integer">
+        select * from user where u_id = #{id}
+    </select>
+
+    <delete id="deleteTeacherById" parameterType="Integer">
+        delete from user where u_id=#{id}
+    </delete>
+
+</mapper>

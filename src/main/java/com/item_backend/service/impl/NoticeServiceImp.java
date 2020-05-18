@@ -5,7 +5,9 @@ import com.github.pagehelper.PageHelper;
 import com.item_backend.mapper.NoticeMapper;
 import com.item_backend.model.dto.NoticeDto;
 import com.item_backend.model.entity.Notice;
-import com.item_backend.model.entity.NoticeQueryInfo;
+import com.item_backend.model.entity.PageQueryInfo;
+import com.item_backend.model.pojo.Result;
+import com.item_backend.model.pojo.StatusCode;
 import com.item_backend.service.NoticeService;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +22,16 @@ public class NoticeServiceImp implements NoticeService {
     NoticeMapper noticeMapper;
 
     @Override
-    public NoticeDto getNoticeList(NoticeQueryInfo noticeQueryInfo) {
-        if (noticeQueryInfo.getQuery()!=""){ }
+    public Result getNoticeList(PageQueryInfo pageQueryInfo) {
+        if (pageQueryInfo.getQuery()!=""){ }
 
         int pageNum=1;
-        if (noticeQueryInfo.getPageNum()!=null)
-            pageNum = noticeQueryInfo.getPageNum();
+        if (pageQueryInfo.getPageNum()!=null)
+            pageNum = pageQueryInfo.getPageNum();
         int pageSize=5;
 
-        if ( noticeQueryInfo.getPageSize()!=null)
-            pageSize = noticeQueryInfo.getPageSize();
+        if ( pageQueryInfo.getPageSize()!=null)
+            pageSize = pageQueryInfo.getPageSize();
 
         Page page= PageHelper.startPage(pageNum, pageSize);
 
@@ -53,12 +55,15 @@ public class NoticeServiceImp implements NoticeService {
         noticeDto.setNotices(notices);
         noticeDto.setPageNum(page.getPageNum());
         noticeDto.setTotal((int) page.getTotal());
-        Map meta=new HashMap();
-        meta.put("status",200);
-        noticeDto.setMeta(meta);
 
+        String msg="获取数据成功";
+        if (notices.size()==0){
+            msg="后台没有数据";
+        }
 
-        return noticeDto;
+        Result result=new Result(StatusCode.OK,msg,noticeDto);
+
+        return result;
     }
 
     @Override

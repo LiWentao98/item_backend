@@ -1,24 +1,21 @@
 package com.item_backend.model.dto;
 
-import com.item_backend.model.entity.Notice;
+import com.item_backend.model.entity.FacultyAndUser;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
 
 @ApiModel
-public class NoticeDto {
-
+public class FacultyDto {
     @ApiModelProperty(value = "消息总条数")
     private int total;
 
     @ApiModelProperty(value = "页面数")
     private int pageNum;
 
-    @ApiModelProperty(value = "当前页的消息数组")
-    ArrayList<Notice> notices;
-
+    @ApiModelProperty(dataType = "List",example = "{faculty_id: 1, faculty_name: \"计算机科学学院\", school: \"长江大学\", u_id: 1, name: \"正经仁\", u_state: \"正常\"}")
+    private List<FacultyAndUser> facultyList;
 
     public int getTotal() {
         return total;
@@ -36,11 +33,11 @@ public class NoticeDto {
         this.pageNum = pageNum;
     }
 
-    public ArrayList<Notice> getNotices() {
-        return notices;
+    public List<FacultyAndUser> getFacultyList() {
+        return facultyList;
     }
 
-    public void setNotices(ArrayList<Notice> notices) {
-        this.notices = notices;
+    public void setFacultyList(List<FacultyAndUser> facultyList) {
+        this.facultyList = facultyList;
     }
 }

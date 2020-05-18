@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace= "com.item_backend.mapper.FacultyAndUserMapper" >
+    <resultMap id ="FacultyAndUser" type="com.item_backend.model.entity.FacultyAndUser">
+        <result column="faculty_id" property="faculty_id"/>
+        <result column="faculty_name" property="faculty_name"/>
+        <result column="school" property="school"/>
+        <result column="u_id" property="u_id"/>
+        <result column="name" property="name"/>
+        <result column="u_state" property="u_state"/>
+    </resultMap>
+
+    <select id="findAllFacultyInfo" resultType="List" resultMap="FacultyAndUser">
+        select faculty_id,faculty_name,school,user.u_id as u_id,name,u_state from user,faculty where u_faculty=faculty_name
+    </select>
+
+</mapper>

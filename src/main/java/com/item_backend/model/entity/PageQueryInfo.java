@@ -1,6 +1,6 @@
 package com.item_backend.model.entity;
 
-public class NoticeQueryInfo {
+public class PageQueryInfo {
     private String query;
     private Integer pageNum;
     private Integer pageSize;

@@ -1,25 +1,18 @@
 package com.item_backend.controller.notice;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.item_backend.mapper.NoticeMapper;
-import com.item_backend.model.dto.NoticeDto;
 import com.item_backend.model.entity.Notice;
-import com.item_backend.model.entity.NoticeQueryInfo;
-import com.item_backend.model.pojo.PageResult;
+import com.item_backend.model.entity.PageQueryInfo;
+import com.item_backend.model.pojo.Result;
 import com.item_backend.service.impl.NoticeServiceImp;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.Pattern;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -39,9 +32,9 @@ public class NoticeController {
             @ApiImplicitParam(name = "pageSize", value = "每页大小", defaultValue = "8")
     })
     /*自动封装，如果时字符串没有找到，就是空串， 如果是其他数据类型，没有就是null*/
-   public NoticeDto getNoticeList(NoticeQueryInfo noticeQueryInfo){
-     NoticeDto noticeDto=  noticeServiceImp.getNoticeList(noticeQueryInfo);
-       return noticeDto;
+   public Result getNoticeList(PageQueryInfo pageQueryInfo){
+        Result Result=  noticeServiceImp.getNoticeList(pageQueryInfo);
+       return Result;
 
     }
 
