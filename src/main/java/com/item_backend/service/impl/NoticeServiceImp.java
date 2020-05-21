@@ -1,7 +1,10 @@
 package com.item_backend.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.item_backend.config.RedisConfig;
 import com.item_backend.mapper.NoticeMapper;
 import com.item_backend.model.dto.NoticeDto;
 import com.item_backend.model.entity.Notice;
@@ -9,6 +12,12 @@ import com.item_backend.model.entity.PageQueryInfo;
 import com.item_backend.model.pojo.Result;
 import com.item_backend.model.pojo.StatusCode;
 import com.item_backend.service.NoticeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,8 +30,27 @@ public class NoticeServiceImp implements NoticeService {
     @Resource
     NoticeMapper noticeMapper;
 
+    @Autowired
+    RedisTemplate<String,String> redisTemplate;
+    @Autowired
+    ObjectMapper objectMapper;
+
     @Override
     public Result getNoticeList(PageQueryInfo pageQueryInfo) {
+        // 先查询缓存中是否存在
+        if(redisTemplate.hasKey(RedisConfig.REDIS_NOTICE + pageQueryInfo.getQuery()+pageQueryInfo.getPageNum()+pageQueryInfo.getPageSize())){
+
+            // 缓存中不存在，先查询所有的学科信息放入redis中
+            String result= redisTemplate.opsForValue().get(RedisConfig.REDIS_NOTICE + pageQueryInfo.getQuery()+pageQueryInfo.getPageNum()+pageQueryInfo.getPageSize());
+            try {
+             Result res=  objectMapper.readValue(result,Result.class);
+             return res;
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+
+
         if (pageQueryInfo.getQuery()!=""){ }
 
         int pageNum=1;
@@ -63,11 +91,20 @@ public class NoticeServiceImp implements NoticeService {
 
         Result result=new Result(StatusCode.OK,msg,noticeDto);
 
+        try {
+            redisTemplate.opsForValue().set(RedisConfig.REDIS_NOTICE + pageQueryInfo.getQuery()+pageQueryInfo.getPageNum()+pageQueryInfo.getPageSize(),
+                    objectMapper.writeValueAsString(result));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         return result;
+
     }
 
     @Override
     public Map saveNoticeService(Notice notice) {
+
         if (notice.getPublish_time()==""){
             SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
             notice.setPublish_time(dateFormat.format(new Date()));

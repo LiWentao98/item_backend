@@ -9,10 +9,11 @@
         <id property="u_type" column="u_type"/>
         <result property="u_type_name" column="u_type_name"/>
         <result property="u_power" column="u_power"/>
+        <result property="parent_u_type" column="parent_u_type"/>
     </resultMap>
 
     <select id="searchUserTypeByUType" parameterType="Integer" resultMap="UserType">
-        SELECT u_type, u_type_name, u_power from user_type
+        SELECT u_type, u_type_name, u_power, parent_u_type from user_type
         WHERE u_type = #{u_type}
     </select>
 

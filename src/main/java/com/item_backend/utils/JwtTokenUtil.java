@@ -3,6 +3,8 @@ package com.item_backend.utils;
 import com.item_backend.config.JwtConfig;
 import com.item_backend.model.dto.UserDto;
 import com.item_backend.model.entity.User;
+import com.item_backend.model.pojo.Result;
+import com.item_backend.model.pojo.StatusCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -25,6 +27,23 @@ public class JwtTokenUtil implements Serializable {
     @Autowired
     private JwtConfig jwtConfig;
 
+
+    // 对角色进行检测
+    public Boolean checkUserType(HttpServletRequest request, String role){
+        String token = request.getHeader(jwtConfig.getHeader());
+        token = token.substring(jwtConfig.getPrefix().length());
+        // 判断是否符合传进来的角色
+        String str = getRolesFromToken(token);
+        try {
+            if (str.equals(role)){
+                return true;
+            }
+        }catch (NullPointerException e){
+            throw new RuntimeException("无token");
+        }
+
+        return false;
+    }
 
     /**
      * 从request中获取用户id
@@ -198,7 +217,7 @@ public class JwtTokenUtil implements Serializable {
      * @return
      */
     public Boolean validateToken(String token, User user) {
-        final Integer uId = getUIDFromToken(token);  //从token中取出用户名
+        final Integer uId = getUIDFromToken(token);  //从token中取出UID
         return ((uId == user.getU_id())
                 &&
                 !isTokenExpired(token) //校验是否过期

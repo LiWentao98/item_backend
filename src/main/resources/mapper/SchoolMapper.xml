@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.item_backend.mapper.SchoolMapper">
+
+    <resultMap id="School" type="School">
+        <id property="school_id" column="school_id"/>
+        <result property="u_id" column="u_id"/>
+        <result property="school_name" column="school_name"/>
+    </resultMap>
+
+    <select id="searchSchoolIdBySchoolName" parameterType="String" resultType="Integer">
+        SELECT school_id
+        from school
+        WHERE school_name = #{subject_id}
+    </select>
+
+    <select id="searchSchoolIdByAdminId" parameterType="Integer" resultType="Integer">
+        SELECT school_id
+        from school
+        WHERE u_id = #{id}
+    </select>
+</mapper>

@@ -4,15 +4,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.item_backend.model.entity.User;
 import com.item_backend.model.pojo.Result;
 import com.item_backend.model.pojo.StatusCode;
+import com.item_backend.service.impl.ChapterServiceImpl;
+import com.item_backend.service.impl.QuestionTypeServiceImpl;
+import com.item_backend.service.impl.SubjectServiceImpl;
 import com.item_backend.service.impl.UserServiceImpl;
 import com.item_backend.utils.FormatUtil;
+import com.item_backend.utils.JwtTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -27,10 +29,25 @@ import java.util.Map;
 public class UserController {
 
     @Autowired
-    UserServiceImpl userServiceImpl;
+    UserServiceImpl userService;
+
+    @Autowired
+    SubjectServiceImpl subjectService;
+
+    @Autowired
+    ChapterServiceImpl chapterService;
+
+    @Autowired
+    QuestionTypeServiceImpl questionTypeService;
 
     @Autowired
     FormatUtil formatUtil;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    HttpServletRequest request;
 
     /**
      * 用户登录
@@ -39,14 +56,14 @@ public class UserController {
      */
     @ApiOperation(value = "用户登录", notes = "Result：状态码+msg+(data)", httpMethod = "POST")
     @PostMapping("/login")
-    public Result login(User user) {
+    public Result login(@RequestBody User user) {
         if (!formatUtil.checkStringNull(user.getJob_number(), user.getPassword())) {
             return Result.create(StatusCode.ERROR, "参数错误");
         }
         try {
             Map map = null;
             try {
-                map = userServiceImpl.login(user);
+                map = userService.login(user);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -59,7 +76,6 @@ public class UserController {
         }
     }
 
-
     /**
      * 用户登出
      * @return Result：状态码+msg
@@ -67,7 +83,7 @@ public class UserController {
     @ApiOperation(value = "用户登出",notes = "Result：状态码+msg;删除redis中的key", httpMethod = "GET")
     @GetMapping("/logout")
     public Result logout() {
-        if(userServiceImpl.logout()) {
+        if(userService.logout()) {
             return Result.create(StatusCode.OK, "退出成功");
         }
         return Result.create(StatusCode.ERROR, "退出失败");
@@ -77,7 +93,7 @@ public class UserController {
     public Result profile(HttpServletRequest request) {
         String token = request.getHeader("token");
         try {
-            Map map = userServiceImpl.getProfile(token);
+            Map map = userService.getProfile(token);
             if (map.get("msg") != null) {
                 return Result.create(StatusCode.ACCESSERROR, map.get("msg").toString());
             }
@@ -91,7 +107,7 @@ public class UserController {
     public Result updateUserDetail(HttpServletRequest request, User user) {
         String token = request.getHeader("token");
         try {
-            Map map = userServiceImpl.updateUserDetail(token, user);
+            Map map = userService.updateUserDetail(token, user);
             if (map.get("msg") != null) {
                 return Result.create(StatusCode.ACCESSERROR, map.get("msg").toString());
             }
@@ -105,7 +121,7 @@ public class UserController {
     public Result changePassword(HttpServletRequest request, String oldPassword, String newPassword) {
         String token = request.getHeader("token");
         try {
-            Map map = userServiceImpl.changePassword(token, oldPassword, newPassword);
+            Map map = userService.changePassword(token, oldPassword, newPassword);
             if (map.get("msg") != null) {
                 return Result.create(StatusCode.ACCESSERROR, map.get("msg").toString());
             }

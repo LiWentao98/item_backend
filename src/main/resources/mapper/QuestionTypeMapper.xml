@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.item_backend.mapper.QuestionTypeMapper">
+
+    <resultMap id="QuestionType" type="QuestionType">
+        <id property="q_type_id" column="q_type_id"/>
+        <result property="subject_id" column="subject_id"/>
+        <result property="q_type_name" column="q_type_name"/>
+    </resultMap>
+
+    <select id="searchQuestionTypeByMajorId" parameterType="Integer" resultMap="QuestionType">
+        SELECT q_type_id, subject_id, q_type_name
+        from q_type
+        WHERE subject_id = #{value}
+    </select>
+
+    <insert id="addQuestionType" parameterType="QuestionType">
+        INSERT INTO q_type (subject_id, q_type_name) VALUES (#{subject_id}, #{q_type_name})
+    </insert>
+
+    <delete id="deleteQuestionType" parameterType="Integer">
+        DELETE from q_type
+        WHERE q_type_id = #{q_type_id}
+    </delete>
+</mapper>

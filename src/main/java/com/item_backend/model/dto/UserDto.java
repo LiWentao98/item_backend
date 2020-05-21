@@ -18,10 +18,13 @@ import java.io.Serializable;
 @ToString
 public class UserDto implements Serializable {
 
-
-    private static final long serialVersionUID = -7388350950752987171L;
+    private static final long serialVersionUID = 90421299385712508L;
 
     private User user;
 
     private UserType userType;
+
+    private Integer school_id;
+
+    private Integer faculty_id;
 }

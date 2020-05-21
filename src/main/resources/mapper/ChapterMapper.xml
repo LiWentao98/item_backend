@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.item_backend.mapper.ChapterMapper">
+
+    <resultMap id="Chapter" type="Chapter">
+        <id property="chapter_id" column="chapter_id"/>
+        <result property="subject_id" column="subject_id"/>
+        <result property="chapter_name" column="chapter_name"/>
+    </resultMap>
+
+    <select id="searchChapterBySubjectId" parameterType="Integer" resultMap="Chapter">
+        SELECT chapter_id, subject_id, chapter_name
+        from chapter
+        WHERE subject_id = #{subject_id}
+    </select>
+
+    <insert id="addChapter" parameterType="Chapter">
+        INSERT INTO chapter (chapter_id, subject_id, chapter_name) VALUES (#{chapter_id}, #{subject_id}, #{chapter_name})
+    </insert>
+
+    <delete id="deleteChapter" parameterType="Integer">
+        DELETE from chapter
+        WHERE chapter_id = #{chapter_id}
+    </delete>
+</mapper>

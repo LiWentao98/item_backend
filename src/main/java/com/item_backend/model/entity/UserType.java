@@ -25,4 +25,7 @@ public class UserType implements Serializable {
 
     @ApiModelProperty(value = "用户权限", dataType = "String")
     private String u_power; // 用户权限
+
+    @ApiModelProperty(value = "上级用户类型", dataType = "Integer")
+    private Integer parent_u_type; //上级用户类型
 }

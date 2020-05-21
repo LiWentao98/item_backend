@@ -18,4 +18,11 @@ public class RedisConfig {
 
     public static final String REDIS_QUESTION = "QUESTION_";
 
+    /**
+     * redis中存储学科信息前缀
+     */
+    public static final String REDIS_SUBJECT = "SUBJECT_";
+    public static final String REDIS_NOTICE = "NOTICE";
+
+
 }

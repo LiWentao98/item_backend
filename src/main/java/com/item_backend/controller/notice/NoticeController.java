@@ -1,5 +1,6 @@
 package com.item_backend.controller.notice;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.item_backend.model.entity.Notice;
 import com.item_backend.model.entity.PageQueryInfo;
 import com.item_backend.model.pojo.Result;
@@ -8,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +26,9 @@ public class NoticeController {
     @Resource
     NoticeServiceImp noticeServiceImp;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @ApiOperation("获取通知消息")
     @PostMapping("/getNoticeList")
     @ApiImplicitParams({
@@ -33,6 +38,8 @@ public class NoticeController {
     })
     /*自动封装，如果时字符串没有找到，就是空串， 如果是其他数据类型，没有就是null*/
    public Result getNoticeList(PageQueryInfo pageQueryInfo){
+
+
         Result Result=  noticeServiceImp.getNoticeList(pageQueryInfo);
        return Result;
 
