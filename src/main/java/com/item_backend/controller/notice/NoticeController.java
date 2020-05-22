@@ -10,9 +10,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -30,7 +28,7 @@ public class NoticeController {
     private ObjectMapper objectMapper;
 
     @ApiOperation("获取通知消息")
-    @PostMapping("/getNoticeList")
+    @GetMapping("/getNoticeList")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "query", value = "查询关键字", defaultValue = ""),
             @ApiImplicitParam(name = "pageNum", value = "页号", defaultValue = "1"),
@@ -63,7 +61,7 @@ public class NoticeController {
 
 
     @ApiOperation("通过公告id删除公告")
-    @PostMapping("/deleteNotice")
+    @DeleteMapping("/deleteNotice")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "n_id", value = "消息id", defaultValue = "42"),
     })

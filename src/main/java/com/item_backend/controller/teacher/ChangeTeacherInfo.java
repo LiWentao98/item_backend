@@ -20,7 +20,7 @@ public class ChangeTeacherInfo {
     @Autowired
     TeacherInfoMapper teacherInfoMapper;
 
-    @PutMapping("/addTeacher")
+    @PostMapping("/addTeacher")
     @ApiOperation("获取通知消息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "u_school", value = "所属学校名(非空)", defaultValue = "清华大学"),
@@ -64,6 +64,5 @@ public class ChangeTeacherInfo {
       }
       Result result=new Result(StatusCode.OK,s,null);
       return result;
-
     }
 }
