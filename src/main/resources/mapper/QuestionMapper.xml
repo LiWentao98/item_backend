@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.item_backend.mapper.QuestionMapper">
+
+    <resultMap id="Question" type="Question">
+        <id property="q_id" column="q_id"/>
+        <result property="q_category" column="q_category"/>
+        <result property="q_major" column="q_major"/>
+        <result property="q_subject" column="q_subject"/>
+        <result property="q_chapter" column="q_chapter"/>
+        <result property="q_state" column="q_state"/>
+        <result property="q_type" column="q_type"/>
+        <result property="q_content" column="q_content"/>
+        <result property="q_image_url" column="q_image_url"/>
+        <result property="difficulty" column="difficulty"/>
+        <result property="knowledge" column="knowledge"/>
+        <result property="tags" column="tags"/>
+        <result property="answer" column="answer"/>
+        <result property="upload_time" column="upload_time"/>
+        <result property="opinion" column="opinion"/>
+        <result property="u_id" column="u_id"/>
+    </resultMap>
+
+    <insert id="addQuestion" parameterType="Question">
+        INSERT INTO question(q_category, q_major, q_subject, q_chapter, q_state, q_type, q_content, q_image_url,
+        difficulty, knowledge, tags, answer, opinion, u_id)
+        VALUES(#{q_category}, #{q_major}, #{q_subject}, #{q_chapter}, #{q_state}, #{q_type}, #{q_content}, #{q_image_url},
+        #{difficulty}, #{knowledge}, #{tags}, #{answer}, #{opinion}, #{u_id})
+    </insert>
+
+    <update id="updateQuestion" parameterType="Question">
+        UPDATE question SET q_chapter = #{q_chapter}, q_state = #{q_state}, q_type = #{q_type}, q_content = #{q_content},
+        q_image_url = #{q_image_url}, difficulty = #{difficulty}, knowledge = #{knowledge}, tags = #{tags}, answer = #{answer},
+        opinion = #{opinion}
+        WHERE q_id = #{q_id}
+    </update>
+
+    <select id="searchQuestionByQId" parameterType="Integer" resultMap="Question">
+        select * from question
+        WHERE q_id = #{q_id}
+    </select>
+
+    <select id="searchQuestionsByProperties" resultMap="Question">
+        select * from question
+        <where>
+            1 = 1
+            <if test="question.q_type != null and question.q_type != ''">
+                and q_type = #{question.q_type}
+            </if>
+            <if test="question.q_chapter != null and question.q_chapter != ''">
+                and q_chapter = #{question.q_chapter}
+            </if>
+            <if test=" question.tags!= null and question.tags != ''">
+                and tags like concat('%',#{question.tags},'%')
+            </if>
+        </where>
+        order by upload_time DESC
+        limit #{start}, #{showCount}
+    </select>
+
+    <select id="getQuestionCountByProperties" parameterType="Question" resultType="int">
+        select COUNT(1) from question
+        <where>
+            1 = 1
+            <if test="q_type != null and q_type != ''">
+                and q_type = #{q_type}
+            </if>
+            <if test="q_chapter != null and q_chapter != ''">
+                and q_chapter = #{q_chapter}
+            </if>
+            <if test="tags!= null and tags != ''">
+                and tags like concat('%',#{tags},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="searchQuestionsByUId" resultMap="Question">
+        select * from question
+        WHERE u_id = #{u_id}
+        order by upload_time DESC
+        limit #{start}, #{showCount}
+    </select>
+
+    <select id="getQuestionCountByUId" parameterType="Integer" resultType="int">
+        select COUNT(1) from question
+        WHERE u_id = #{u_id}
+    </select>
+
+    <select id="searchPendingQuestionsByOperateSubject" resultMap="Question">
+        select * from question
+        where q_state = 3
+        AND u_id in
+        (select u_id from user where operate_subject = #{operate_subject})
+        order by upload_time DESC
+        limit #{start}, #{showCount}
+    </select>
+
+    <select id="getPendingQuestionsCountByOperateSubject" parameterType="Integer" resultType="int">
+        select COUNT(1) from question
+        where q_state = 3
+        AND u_id in
+        (select u_id from user where operate_subject = #{operate_subject})
+    </select>
+
+    <update id="changeQuestionState">
+        UPDATE question SET q_state = #{q_state}
+        WHERE q_id = #{q_id}
+    </update>
+
+    <select id="searchQuestionsByEId" parameterType="Integer" resultMap="Question">
+        SELECT * from question
+        WHERE q_id in
+        (SELECT q_id from e_q WHERE e_id = #{e_id})
+    </select>
+
+</mapper>

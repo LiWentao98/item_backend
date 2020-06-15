@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.item_backend.mapper.ExamPaperMapper">
+
+    <resultMap id="ExamPaper" type="ExamPaper">
+        <id property="e_id" column="e_id"/>
+        <result property="e_title" column="e_title"/>
+        <result property="e_subject" column="e_subject"/>
+        <result property="finish_type" column="finish_type"/>
+        <result property="finish_time" column="finish_time"/>
+        <result property="distinction" column="distinction"/>
+        <result property="u_id" column="u_id"/>
+    </resultMap>
+
+    <insert id="addExamPaper" parameterType="ExamPaper">
+        INSERT INTO exam_paper(e_title, e_subject, finish_type, finish_time, distinction, u_id)
+        VALUES(#{e_title}, #{e_subject}, #{finish_type}, #{finish_time}, #{distinction}, #{u_id})
+    </insert>
+
+    <select id="searchExamPaperByEId" parameterType="Integer" resultMap="ExamPaper">
+        select * from exam_paper
+        WHERE e_id = #{e_id}
+    </select>
+
+    <select id="searchExamPapersByUId" resultMap="ExamPaper">
+        select * from exam_paper
+        WHERE u_id = #{u_id}
+        order by finish_time DESC
+        limit #{start}, #{showCount}
+    </select>
+
+    <select id="getExamPaperCountByUId" parameterType="Integer" resultType="int">
+        select COUNT(1) from exam_paper
+        WHERE u_id = #{u_id}
+    </select>
+
+    <delete id="deleteExamPaperByEIdAndUId">
+        DELETE FROM exam_paper WHERE e_id = #{e_id} AND u_id = #{u_id}
+    </delete>
+
+</mapper>
