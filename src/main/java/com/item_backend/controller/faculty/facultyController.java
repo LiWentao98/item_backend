@@ -27,7 +27,7 @@ public class facultyController {
     public PageResult<FacultyAndUser> getFacultyInfo(){
 
         List<FacultyAndUser> list=   facultyAndUserServiceImp.getFacultyInfo();
-        PageResult<FacultyAndUser> result=new PageResult<FacultyAndUser>(2,list,"获取数据成功",StatusCode.OK);
+        PageResult<FacultyAndUser> result=new PageResult<FacultyAndUser>(2,list);
         return result;
     }
 }

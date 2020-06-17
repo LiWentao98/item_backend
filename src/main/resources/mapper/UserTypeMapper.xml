@@ -12,9 +12,55 @@
         <result property="parent_u_type" column="parent_u_type"/>
     </resultMap>
 
+
     <select id="searchUserTypeByUType" parameterType="Integer" resultMap="UserType">
-        SELECT u_type, u_type_name, u_power, parent_u_type from user_type
-        WHERE u_type = #{u_type}
+        select * from user_type where u_type = #{type}
     </select>
+
+    <select id="getAllUserType" parameterType="int"  resultMap="UserType">
+     select * from user_type where parent_u_type >=(SELECT u_type from user where u_id= #{u_id})
+    </select>
+
+    <insert id="addUserType" parameterType="com.item_backend.model.entity.UserType">
+        insert into user_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="u_type_name!=null">
+                u_type_name,
+            </if>
+            <if test="parent_u_type!=null" >
+                parent_u_type
+            </if>
+        </trim>
+
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{u_type_name},
+            <if test="parent_u_type!=null" >
+                #{parent_u_type}
+            </if>
+        </trim>
+
+    </insert>
+
+    <delete id="deleteUserTypeByUType" parameterType="Integer" >
+        delete from user_type where u_type=#{u_type}
+    </delete>
+    <update id="updateUserType" parameterType="com.item_backend.model.entity.UserType">
+        update user_type
+        <set>
+            <if test="u_type_name!=null and u_type_name!= '' ">
+                u_type_name=#{u_type_name},
+            </if>
+
+            <if test="u_power!=null and u_power!='' ">
+                u_power=#{u_power},
+            </if>
+
+            <if test="parent_u_type!=null">
+                parent_u_type=#{parent_u_type},
+            </if>
+        </set>
+        where u_type=#{u_type}
+
+    </update>
 
 </mapper>

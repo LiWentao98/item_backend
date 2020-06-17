@@ -12,16 +12,41 @@
         <result column="u_id" property="u_id"/>
     </resultMap>
 
-    <select id = "findAllNotice" resultMap="Notice">
-        select * from notice
+    <select id = "getManagerNotice" parameterType="Integer" resultMap="Notice">
+        select * from notice where u_id in(select u_id from school where school_id=#{school_id}) order by publish_time desc
     </select>
 
-    <insert id="saveNotice" parameterType="Notice">
-        insert into notice(n_id,n_title,n_content,publish_time,u_name,u_id) values(#{n_id},#{n_title},#{n_content},#{publish_time},#{u_name},#{u_id})
+    <select id = "getSuperManagerNotice" parameterType="Integer" resultMap="Notice">
+       select * from notice where u_id in(select u_id from school where school_id = #{id}) order by publish_time desc
+    </select>
+
+    <select id="countAllManagerNoticeBySchoolId" parameterType="Integer" resultType="Integer">
+        select count(0) from notice where u_id in(select u_id from school where school_id = #{id})
+    </select>
+
+    <insert id="saveManagerNotice" parameterType="com.item_backend.model.entity.Notice">
+        insert into notice(n_title,n_content,u_name,u_id) values(#{n_title},#{n_content},#{u_name},#{u_id})
+    </insert>
+    <insert id="saveSuperManagerNotice" parameterType="com.item_backend.model.entity.Notice">
+        insert into notice(n_title,n_content,u_name,u_id) values(#{n_title},#{n_content},#{u_name},#{u_id})
     </insert>
 
-    <delete id="deleteNoticeById" parameterType="Integer">
-        delete from notice where n_id=#{id}
+
+    <delete id="deleteSuperManagerNoticeByNoticeId" parameterType="Integer">
+       delete from notice where n_id=#{id}
     </delete>
+    <delete id="deleteManagerNoticeByNoticeId" parameterType="Integer">
+       delete from notice where n_id=#{id}
+    </delete>
+
+
+
+    <select id="getSchoolIdForNoticeUid" parameterType="com.item_backend.model.entity.Notice" resultType="Integer">
+        select school_id from school where u_id=#{u_id};
+    </select>
+
+    <select id="getSchoolIdFromNid" resultType="Integer" parameterType="Integer">
+      SELECT school_id from school where u_id in( select u_id from notice where n_id = #{id} )
+    </select>
 
 </mapper>
